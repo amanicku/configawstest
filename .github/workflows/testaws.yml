@@ -1,0 +1,33 @@
+name: AWS Test Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test-aws-access:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: us-west-1
+        role-to-assume: arn:aws:iam::232869724301:role/TestConfigureAWSCreds-Role-aoGpyXV8KqBa
+
+    - name: Test AWS Access
+      run: |
+        aws sts get-caller-identity
+        aws s3 ls
+
+    - name: Run a custom AWS command
+      run: |
+        echo "Add your custom AWS CLI commands here"
