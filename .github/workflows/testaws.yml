@@ -26,7 +26,6 @@ jobs:
     - name: Test AWS Access
       run: |
         aws sts get-caller-identity
-        aws s3 ls
 
     - name: Run a custom AWS command
       run: |
