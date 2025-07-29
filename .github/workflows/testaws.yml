@@ -5,28 +5,21 @@ on:
     branches:
       - main
 
+permissions:
+  id-token: write
+  #contents: read
+
 jobs:
-  test-aws-access:
+  aws-test:
     runs-on: ubuntu-latest
-    
-    permissions:
-      id-token: write
-      contents: read
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::232869724301:role/ConfigAWSAccess
+          aws-region: us-west-1
 
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        aws-region: us-west-1
-        role-to-assume: arn:aws:iam::232869724301:role/TestConfigureAWSCreds-Role-aoGpyXV8KqBa
-
-    - name: Test AWS Access
-      run: |
-        aws sts get-caller-identity
-
-    - name: Run a custom AWS command
-      run: |
-        echo "Add your custom AWS CLI commands here"
+      - name: Test AWS Connection
+        run: |
+          aws sts get-caller-identity
+          echo "AWS connection successful!"
